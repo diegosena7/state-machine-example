@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: Gerenciamento de Consentimentos
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: consentdb
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 2000
+          max-attempts: 3
+          multiplier: 1.5
+        auto-startup: true
+        default-requeue-rejected: false
+
+server:
+  port: 8080

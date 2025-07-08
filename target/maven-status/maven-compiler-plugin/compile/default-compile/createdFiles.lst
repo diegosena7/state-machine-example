@@ -1,0 +1,15 @@
+com\dsena7\exceptions\EntityNotFoundException.class
+com\dsena7\model\ConsentEventEnum.class
+com\dsena7\utils\ConsentConsumerUtils.class
+com\dsena7\config\RabbitMQConfig.class
+com\dsena7\model\ConsentDTO.class
+com\dsena7\service\ConsentStateService.class
+com\dsena7\controller\ConsentController.class
+com\dsena7\exceptions\StateMachineTransitionException.class
+com\dsena7\repository\ConsentRepository.class
+com\dsena7\model\ConsentEntity$ConsentEntityBuilder.class
+com\dsena7\ConsentApplication.class
+com\dsena7\config\StateMachineConfig.class
+com\dsena7\model\ConsentEntity.class
+com\dsena7\model\ConsentStateEnum.class
+com\dsena7\service\ConsentStateServiceImpl.class

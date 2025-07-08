@@ -1,0 +1,60 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.2.0">
+  <diagram name="Página-1" id="pItTlCYV_xXO3khBksh5">
+    <mxGraphModel dx="872" dy="873" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="j_EsMG4aMrRecmwOxVlx-1" target="j_EsMG4aMrRecmwOxVlx-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="j_EsMG4aMrRecmwOxVlx-1" target="j_EsMG4aMrRecmwOxVlx-14">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="346" y="212" />
+              <mxPoint x="346" y="313" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="126" y="182" width="143" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-2" value="consent-statemachine" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="137.5" y="197" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-5" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.queue;fillColor=#D9A741;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="160.75" y="65" width="73.5" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-6" value="consent.queue" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="149" y="36" width="97" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" edge="1" parent="1" source="j_EsMG4aMrRecmwOxVlx-1" target="j_EsMG4aMrRecmwOxVlx-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-9" value="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="205.25" y="146" width="29" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-10" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Consent-StateMachine&lt;/h1&gt;&lt;p&gt;1 - Consome eventos da fila (consent.queue)&lt;/p&gt;&lt;p&gt;2 - Verifica se o consentId esta na base&lt;/p&gt;&lt;p&gt;3 - Muda o estado do consentId para EPIRED&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="285" y="-127" width="292" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-11" value="" style="image;html=1;image=img/lib/clip_art/computers/Database_128x128.png" vertex="1" parent="1">
+          <mxGeometry x="423" y="38" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-12" value="Operação: GET" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="412" y="124" width="102" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-14" value="" style="image;html=1;image=img/lib/clip_art/computers/Database_128x128.png" vertex="1" parent="1">
+          <mxGeometry x="434" y="273" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-15" value="Operação: UPDATE" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="412" y="359" width="125" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-17" value="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="400" y="95" width="29" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="j_EsMG4aMrRecmwOxVlx-20" value="3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="400" y="279" width="29" height="29" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
