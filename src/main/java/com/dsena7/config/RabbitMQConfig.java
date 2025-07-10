@@ -27,8 +27,8 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue consentQueue() {
-        // O segundo parâmetro 'true' indica que a fila é durável (sobrevive a reinicializações do broker)
-        return new Queue("consent.queue", true);
+        return new Queue("consent.queue", true, false, false);
+        // durable=true, exclusive=false, autoDelete=false
     }
 
     @Bean

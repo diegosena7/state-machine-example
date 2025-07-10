@@ -1,27 +1,54 @@
+version: '3.8'  # Adicione a versão do compose
+
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_DATABASE=consentdb
-    command: ["mongod", "--noauth"]
-    volumes:
-      - mongodb_data:/data/db
+#  app:
+#    build: .
+#    container_name: consent-app
+#    depends_on:
+#      - mongodb
+#      - rabbitmq
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - app-network
+
+#  mongodb:
+#    image: mongo:latest
+#    container_name: mongodb
+#    ports:
+#      - "27017:27017"
+#    environment:
+#      - MONGO_INITDB_DATABASE=consentdb
+#    volumes:
+#      - type: volume
+#        source: mongodb_data
+#        target: /data/db
+#    networks:
+#      - app-network
+#    command: mongod --bind_ip_all --noauth
 
   rabbitmq:
     image: rabbitmq:3.12-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"    # Porta padrão do RabbitMQ
-      - "15672:15672"  # Porta da interface de gerenciamento
+      - "5672:5672"
+      - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      - type: volume
+        source: rabbitmq_data
+        target: /var/lib/rabbitmq
+    networks:
+      - app-network
 
 volumes:
-  mongodb_data:
+#  mongodb_data:
+#    name: mongodb_data
   rabbitmq_data:
+    name: rabbitmq_data
+
+networks:
+  app-network:
+    driver: bridge

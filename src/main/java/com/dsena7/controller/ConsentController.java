@@ -2,13 +2,16 @@ package com.dsena7.controller;
 
 import com.dsena7.model.ConsentDTO;
 import com.dsena7.model.ConsentEntity;
+import com.dsena7.model.ConsentStateEnum;
 import com.dsena7.repository.ConsentRepository;
+import com.dsena7.utils.ConsentValidationUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,20 +40,29 @@ public class ConsentController {
 
     @PostMapping("/save")
     @Operation(summary = "Insere um consentimento com estado AUTHORISED na base Mongo DB")
-    public ResponseEntity<String> insertConsent(@RequestBody @Valid ConsentDTO consentDTO){
-        log.info("Enviando consentId: {} para a base.", consentDTO.consentId());
-        try{
-            consentRepository.save(ConsentEntity.builder()
+    public ResponseEntity<ConsentEntity> insertConsent(@RequestBody @Valid ConsentDTO consentDTO) {
+        log.info("Iniciando inserção do consentId: {} na base", consentDTO.consentId());
+        try {
+            ConsentEntity entity = ConsentEntity.builder()
                     .consentId(consentDTO.consentId())
                     .state(consentDTO.state())
-                    .updateStatus(LocalDateTime.now())
-                    .build());
-        }catch (Exception exception){
+                    .createdAt(LocalDateTime.now())
+                    .expiratedAt(LocalDateTime.now().plusMinutes(1))
+                    .build();
+
+            ConsentValidationUtils.validateConsentState(entity);
+
+            log.info("Entidade construída: {}", entity);
+
+            ConsentEntity savedEntity = consentRepository.save(entity);
+            log.info("Entidade salva com sucesso: {}", savedEntity);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedEntity);
+        } catch (Exception exception) {
             log.error("Erro ao salvar consentimento: {}", consentDTO.consentId(), exception);
             throw new PersistenceException(
                     String.format("Erro ao inserir consentimento: %s na base de dados",
                             consentDTO.consentId()), exception);
         }
-        return ResponseEntity.ok().body("Consentimento inserido na base: " + consentDTO);
     }
+
 }

@@ -2,6 +2,7 @@ C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statema
 C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statemachine\src\main\java\com\dsena7\model\ConsentEntity.java
 C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statemachine\src\main\java\com\dsena7\config\RabbitMQConfig.java
 C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statemachine\src\main\java\com\dsena7\service\ConsentStateService.java
+C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statemachine\src\main\java\com\dsena7\model\ConsentIdRequestDTO.java
 C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statemachine\src\main\java\com\dsena7\model\ConsentStateEnum.java
 C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statemachine\src\main\java\com\dsena7\service\ConsentStateServiceImpl.java
 C:\Users\diego\Documents\Estudos Dev\my-projects\spring-consent-rabbitmq-statemachine\src\main\java\com\dsena7\ConsentApplication.java

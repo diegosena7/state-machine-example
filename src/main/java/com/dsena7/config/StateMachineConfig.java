@@ -26,7 +26,10 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<ConsentSta
         states.withStates()
                 .initial(ConsentStateEnum.AUTHORISED)
                 .states(EnumSet.allOf(ConsentStateEnum.class))
-                .end(ConsentStateEnum.EXPIRED);
+                .end(ConsentStateEnum.EXPIRED)
+                .initial(ConsentStateEnum.AWAITING_AUTHORISATION)
+                .states(EnumSet.allOf(ConsentStateEnum.class))
+                .end(ConsentStateEnum.REJECTED);
     }
 
     /**
@@ -39,9 +42,15 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<ConsentSta
      */
     @Override
     public void configure(StateMachineTransitionConfigurer<ConsentStateEnum, ConsentEventEnum> transitions) throws Exception {
-        transitions.withExternal()
-                .source(ConsentStateEnum.AUTHORISED)
-                .target(ConsentStateEnum.EXPIRED)
-                .event(ConsentEventEnum.EXPIRE);
+        transitions
+                .withExternal()
+                    .source(ConsentStateEnum.AUTHORISED)
+                    .target(ConsentStateEnum.EXPIRED)
+                    .event(ConsentEventEnum.EXPIRE)
+                .and()
+                .withExternal()
+                    .source(ConsentStateEnum.AWAITING_AUTHORISATION)
+                    .target(ConsentStateEnum.REJECTED)
+                    .event(ConsentEventEnum.REJECT);
     }
 }

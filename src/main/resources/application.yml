@@ -3,9 +3,8 @@ spring:
     name: Gerenciamento de Consentimentos
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: consentdb
+      uri: mongodb://localhost:27017/consentdb
+      auto-index-creation: true
 
   rabbitmq:
     host: localhost
@@ -24,3 +23,13 @@ spring:
 
 server:
   port: 8080
+
+#logging:
+#  level:
+#    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+#    org.springframework.data.mongodb.repository.query: DEBUG
+#    org.mongodb.driver.protocol.command: DEBUG
+#    org.mongodb.driver.operation: DEBUG
+#    org.springframework.data.mongodb: DEBUG
+#    org.mongodb.driver: DEBUG
+#    com.dsena7: DEBUG

@@ -4,5 +4,5 @@ import lombok.ToString;
 
 @ToString
 public enum ConsentStateEnum {
-    AUTHORISED, EXPIRED
+    AUTHORISED, EXPIRED, REJECTED, AWAITING_AUTHORISATION
 }
