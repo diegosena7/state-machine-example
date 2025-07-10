@@ -1,5 +1,29 @@
 # Projeto Spring Boot - Consent State Machine com RabbitMQ
 
+Este projeto demonstra o uso de uma **máquina de estados (State Machine)** com **Spring Boot**, integrada com **MongoDB**, **RabbitMQ** e **Docker**, para gerenciar o ciclo de vida de consentimentos.
+---
+
+## 🚀 Tecnologias Utilizadas
+- **Spring Boot** – Framework principal da aplicação
+- **Spring State Machine** – Controle e transição de estados
+- **MongoDB** – Persistência de dados dos consentimentos
+- **Docker** – Containerização da aplicação e dos serviços
+- **RabbitMQ** – Comunicação assíncrona (mensageria)
+Login padrão do RabbitMQ:
+Usuário: guest
+Senha: guest
+
+### Pré-requisitos
+- Java 17+
+- Docker e Docker Compose
+- Git
+
+## ⚙️ Como Executar o Projeto
+git clone https://github.com/diegosena7/state-machine-example.git
+Acesse o repositório onde clonou o repositorio: cd seu-repositorio
+Execute o comando: docker-compose up -d
+Você pode rodar pela sua IDE (IntelliJ, Eclipse) ou via terminal: ./mvnw spring-boot:run
+
 ### Funcionamento da State Machine
 A State Machine (Máquina de Estados) neste projeto gerencia as transições de estado dos consentimentos, seguindo um fluxo definido:
 1. Estado Inicial (AUTHORISED) → Evento (EXPIRE) → Estado Final (EXPIRED)
