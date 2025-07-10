@@ -24,11 +24,9 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<ConsentSta
     @Override
     public void configure(StateMachineStateConfigurer<ConsentStateEnum, ConsentEventEnum> states) throws Exception {
         states.withStates()
-                .initial(ConsentStateEnum.AUTHORISED)
-                .states(EnumSet.allOf(ConsentStateEnum.class))
-                .end(ConsentStateEnum.EXPIRED)
                 .initial(ConsentStateEnum.AWAITING_AUTHORISATION)
                 .states(EnumSet.allOf(ConsentStateEnum.class))
+                .end(ConsentStateEnum.EXPIRED)
                 .end(ConsentStateEnum.REJECTED);
     }
 

@@ -6,7 +6,7 @@ import com.dsena7.model.ConsentStateEnum;
 
 public class ConsentValidationUtils {
 
-    private static final String STATE_VALIDATION_ERROR = "Consentimento %s com estádo inválido para inserção. Estado atual: %s";
+    private static final String STATE_VALIDATION_ERROR = "Consentimento %s com estádo %s inválido.";
 
     public static void validateConsentState(ConsentEntity entity) {
         if (entity.getState() != ConsentStateEnum.AUTHORISED && entity.getState() != ConsentStateEnum.AWAITING_AUTHORISATION) {

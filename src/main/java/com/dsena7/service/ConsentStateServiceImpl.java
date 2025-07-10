@@ -36,7 +36,7 @@ public class ConsentStateServiceImpl implements ConsentStateService {
 
     private static final String PROCESSING_CONSENT_MESSAGE = "Processando consentimento com ID: {}";
     private static final String TRANSITION_SUCCESS_MESSAGE = "Transição de estado realizada com sucesso para consentimento: {} com estado: {}";
-    private static final String TRANSITION_ERROR_MESSAGE = "Erro na transição de estado para consentimento: {}";
+    private static final String TRANSITION_ERROR_MESSAGE = "Erro na transição de estado para consentimento: {} para o estado: {}";
     private static final String CONSENT_NOT_FOUND = "Consentimento não encontrado: %s";
     private static final String SAVE_ERROR = "Erro ao salvar alteração de estado do consentimento";
 
@@ -47,9 +47,9 @@ public class ConsentStateServiceImpl implements ConsentStateService {
      * Processa um consentimento, realizando a transição de estado de AUTHORISED para EXPIRED.
      *
      * @param consentId Identificador único do consentimento
-     * @throws IllegalArgumentException se o consentId for nulo ou vazio
-     * @throws EntityNotFoundException se o consentimento não for encontrado
-     * @throws IllegalStateException se o consentimento não estiver no estado AUTHORISED
+     * @throws IllegalArgumentException        se o consentId for nulo ou vazio
+     * @throws EntityNotFoundException         se o consentimento não for encontrado
+     * @throws IllegalStateException           se o consentimento não estiver no estado AUTHORISED
      * @throws StateMachineTransitionException se houver erro na transição de estado
      */
     @Override
@@ -82,23 +82,30 @@ public class ConsentStateServiceImpl implements ConsentStateService {
      *
      * @param entity A entidade de consentimento que terá seu estado alterado
      * @throws StateMachineTransitionException se ocorrer qualquer erro durante o processo de transição,
-     * seja na configuração da máquina de estados ou na execução da transição.
-     * A exceção incluirá o ID do consentimento na mensagem de erro para facilitar o diagnóstico.
-     * O processo inclui:
-     * 1. Configuração da máquina de estados com o estado atual da entidade
-     * 2. Execução da transição de estado
-     * 3. Tratamento de erros com logging apropriado
+     *                                         seja na configuração da máquina de estados ou na execução da transição.
+     *                                         A exceção incluirá o ID do consentimento na mensagem de erro para facilitar o diagnóstico.
+     *                                         O processo inclui:
+     *                                         1. Configuração da máquina de estados com o estado atual da entidade
+     *                                         2. Execução da transição de estado
+     *                                         3. Tratamento de erros com logging apropriado
      */
     private void processStateMachineTransition(ConsentEntity entity) {
         try {
             StateMachine<ConsentStateEnum, ConsentEventEnum> stateMachine = configureStateMachine(entity);
-            if (entity.getExpiratedAt().isBefore(LocalDateTime.now()) ){
+            if (entity.getState() == ConsentStateEnum.AUTHORISED &&
+                    entity.getExpiratedAt().isBefore(LocalDateTime.now())) {
                 executeStateTransitionToExpired(stateMachine, entity);
-            }else if(entity.getCreatedAt().isBefore(LocalDateTime.now())){
+
+            } else if (entity.getState() == ConsentStateEnum.AWAITING_AUTHORISATION &&
+                    entity.getCreatedAt().isBefore(LocalDateTime.now())) {
                 executeStateTransitionToRejected(stateMachine, entity);
+            } else {
+                log.warn("Nenhuma transição aplicável para o consentimento {} no estado {}",
+                        entity.getConsentId(), entity.getState());
             }
+
         } catch (Exception e) {
-            log.error(TRANSITION_ERROR_MESSAGE, entity.getConsentId(), e);
+            log.error(TRANSITION_ERROR_MESSAGE, entity.getConsentId(), entity.getState(), e);
             throw new StateMachineTransitionException(
                     String.format("Falha ao processar transição de estado para consentimento: %s",
                             entity.getConsentId()), e);
@@ -110,6 +117,7 @@ public class ConsentStateServiceImpl implements ConsentStateService {
      * Para a máquina atual, reseta seu estado e a reinicia com o estado atual da entidade.
      * A máquina de estados inicia como null,por isso o stopReactively é necessário e na
      * chamada do metodo resetStateMachineReactively inicia com o estado atual do consentimento
+     *
      * @param entity Entidade de consentimento
      * @return StateMachine configurada para o consentimento
      */
@@ -119,12 +127,13 @@ public class ConsentStateServiceImpl implements ConsentStateService {
         stateMachine.stopReactively().block();
 
         stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
-            access.resetStateMachineReactively(new DefaultStateMachineContext<>(
-                    entity.getState(), null, null, null)).block();
-            log.info("Estado inicial da máquina: {} para o consentimento: {}", entity.getState(),entity.getConsentId());
+            access.resetStateMachineReactively(
+                    new DefaultStateMachineContext<>(entity.getState(), null, null, null)
+            ).block();
         });
 
         stateMachine.startReactively().block();
+
 
         return stateMachine;
     }
@@ -134,45 +143,42 @@ public class ConsentStateServiceImpl implements ConsentStateService {
      * Envia o evento EXPIRE e atualiza o estado da entidade se a transição for bem-sucedida.
      *
      * @param stateMachine Máquina de estados configurada
-     * @param entity Entidade de consentimento
+     * @param entity       Entidade de consentimento
      * @throws StateMachineTransitionException se a transição falhar
      */
     private void executeStateTransitionToExpired(StateMachine<ConsentStateEnum, ConsentEventEnum> stateMachine, ConsentEntity entity) {
         try {
-            boolean success = stateMachine.sendEvent(Mono.just(MessageBuilder
+            var result = stateMachine.sendEvent
+                    (Mono.just(MessageBuilder
                             .withPayload(ConsentEventEnum.EXPIRE)
-                            .build()))
-                    .blockFirst() != null;
+                            .build())).blockFirst();
 
-            if (!success) {
-                throw new StateMachineTransitionException(
-                        String.format("Falha ao expirar o consentimento: %s", entity.getConsentId()));
+            if (result == null || !stateMachine.getState().getId().equals(ConsentStateEnum.EXPIRED)) {
+                throw new StateMachineTransitionException("Transição inválida ou não aplicada");
             }
 
             updateConsentState(entity, ConsentStateEnum.EXPIRED);
         } catch (Exception e) {
             throw new StateMachineTransitionException(
-                    String.format("Erro ao executar transição de estado para consentimento: %s",
-                            entity.getConsentId()), e);
+                    String.format(TRANSITION_ERROR_MESSAGE, entity.getConsentId(), entity.getState()), e);
         }
     }
 
     /**
      * Executa a transição de estado na máquina de estados.
      * Envia o evento REJECT e atualiza o estado da entidade se a transição for bem-sucedida.
+     *
      * @param stateMachine
      * @param entity
      */
     private void executeStateTransitionToRejected(StateMachine<ConsentStateEnum, ConsentEventEnum> stateMachine, ConsentEntity entity) {
         try {
-            boolean success = stateMachine.sendEvent(Mono.just(MessageBuilder
-                            .withPayload(ConsentEventEnum.REJECT)
-                            .build()))
-                    .blockFirst() != null;
+            var result = stateMachine.sendEvent(
+                    Mono.just(MessageBuilder.withPayload(ConsentEventEnum.REJECT).build())
+            ).blockFirst();
 
-            if (!success) {
-                throw new StateMachineTransitionException(
-                        String.format("Falha ao rejeitar o consentimento: %s", entity.getConsentId()));
+            if (result == null || !stateMachine.getState().getId().equals(ConsentStateEnum.REJECTED)) {
+                throw new StateMachineTransitionException("Transição inválida ou não aplicada");
             }
 
             updateConsentState(entity, ConsentStateEnum.REJECTED);
@@ -185,6 +191,7 @@ public class ConsentStateServiceImpl implements ConsentStateService {
 
     /**
      * Responsável pela mudança de estado na base de dados MongoDB
+     *
      * @param entity
      * @param consentStateEnum
      */
