@@ -20,11 +20,27 @@ Senha: guest
 
 ## ⚙️ Como Executar o Projeto
 git clone https://github.com/diegosena7/state-machine-example.git
-Acesse o repositório onde clonou o repositorio: cd seu-repositorio
-Execute o comando: docker-compose up -d
-Você pode rodar pela sua IDE (IntelliJ, Eclipse) ou via terminal: ./mvnw spring-boot:run
+- Acesse o repositório onde clonou o repositorio: cd seu-repositorio
+- Execute o comando: docker-compose up -d
+- Você pode rodar pela sua IDE (IntelliJ, Eclipse) ou via terminal: ./mvnw spring-boot:run
 
-### Funcionamento da State Machine
+**Curls para testes**
+`curl --location 'http://localhost:8080/v1/consents/save' \
+--header 'Content-Type: application/json' \
+--data '{
+"consentId":"12345",
+"state":"AWAITING_AUTHORISATION"
+}'`
+
+`curl --location 'http://localhost:8080/v1/consents/event' \
+--header 'Content-Type: application/json' \
+--data '{
+"consentId":"12345"
+}'`
+
+OBS: O endpoint /event é usado como um produtor de mensagens na fila do RabbitMQ (tópico: consent.queue)
+
+## Funcionamento da State Machine
 A State Machine (Máquina de Estados) neste projeto gerencia as transições de estado dos consentimentos, seguindo um fluxo definido:
 1. Estado Inicial (AUTHORISED) → Evento (EXPIRE) → Estado Final (EXPIRED)
 2. Estado Inicial (AWAITING_AUTHORISATION) → Evento (REJECT) → Estado Final (REJECTED)
