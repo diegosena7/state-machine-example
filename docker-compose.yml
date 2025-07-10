@@ -1,31 +1,31 @@
 version: '3.8'  # Adicione a versão do compose
 
 services:
-#  app:
-#    build: .
-#    container_name: consent-app
-#    depends_on:
-#      - mongodb
-#      - rabbitmq
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - app-network
+  app:
+    build: .
+    container_name: consent-app
+    depends_on:
+      - mongodb
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
 
-#  mongodb:
-#    image: mongo:latest
-#    container_name: mongodb
-#    ports:
-#      - "27017:27017"
-#    environment:
-#      - MONGO_INITDB_DATABASE=consentdb
-#    volumes:
-#      - type: volume
-#        source: mongodb_data
-#        target: /data/db
-#    networks:
-#      - app-network
-#    command: mongod --bind_ip_all --noauth
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=consentdb
+    volumes:
+      - type: volume
+        source: mongodb_data
+        target: /data/db
+    networks:
+      - app-network
+    command: mongod --bind_ip_all --noauth
 
   rabbitmq:
     image: rabbitmq:3.12-management
@@ -44,8 +44,8 @@ services:
       - app-network
 
 volumes:
-#  mongodb_data:
-#    name: mongodb_data
+  mongodb_data:
+    name: mongodb_data
   rabbitmq_data:
     name: rabbitmq_data
 
