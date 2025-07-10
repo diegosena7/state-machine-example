@@ -24,7 +24,7 @@ git clone https://github.com/diegosena7/state-machine-example.git
 - Execute o comando: docker-compose up -d
 - Você pode rodar pela sua IDE (IntelliJ, Eclipse) ou via terminal: ./mvnw spring-boot:run
 
-**Curls para testes**
+## **Curls para testes**
 `curl --location 'http://localhost:8080/v1/consents/save' \
 --header 'Content-Type: application/json' \
 --data '{
